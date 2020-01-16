@@ -128,7 +128,7 @@ export async function parseSettings(
     ): string => {
       if (typeof rawRootConnectionString !== "string") {
         throw new Error(
-          "Expected a string, or for DATABASE_URL envvar to be set"
+          "Expected a string, or for ROOT_DATABASE_URL envvar to be set"
         );
       }
       return rawRootConnectionString;
