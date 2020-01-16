@@ -80,7 +80,8 @@ export async function _migrateMigrationSchema(
 
 export async function getLastMigration(
   pgClient: Client,
-  parsedSettings: ParsedSettings
+  parsedSettings: ParsedSettings,
+  skipOwnSchema = false
 ): Promise<DbMigration | null> {
   if (!parsedSettings.skipOwnSchema) {
     await _migrateMigrationSchema(pgClient, parsedSettings);

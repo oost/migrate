@@ -26,7 +26,8 @@ async function main() {
   if (argv.length === 0 || cmd === "migrate") {
     const shadow = argv.includes("--shadow");
     const force = argv.includes("--force");
-    await migrate(getSettings(), shadow, force);
+    const skipOwnSchema = argv.includes("--skip-own-schema");
+    await migrate(getSettings(), shadow, force, skipOwnSchema);
   } else if (cmd === "watch") {
     const once = argv.includes("--once");
     const shadow = argv.includes("--shadow");
@@ -40,7 +41,8 @@ async function main() {
     await uncommit(getSettings());
   } else if (cmd === "status") {
     let exitCode = 0;
-    const details = await status(getSettings());
+    const skipOwnSchema = argv.includes("--skip-own-schema");
+    const details = await status(getSettings(), skipOwnSchema);
     const remainingCount = details.remainingMigrations.length;
     if (remainingCount) {
       console.log(

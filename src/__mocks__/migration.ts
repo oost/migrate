@@ -10,7 +10,7 @@ export const generatePlaceholderReplacement = jest.fn(
 
 export const _migrateMigrationSchema = jest.fn(realMigrateMigrationSchema);
 
-export const getLastMigration = jest.fn((_client, _settings) =>
+export const getLastMigration = jest.fn((_client, _settings, _skip) =>
   Promise.resolve(null)
 );
 

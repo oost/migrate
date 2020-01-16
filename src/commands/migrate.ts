@@ -10,7 +10,8 @@ import { executeActions } from "../actions";
 export async function _migrate(
   parsedSettings: ParsedSettings,
   shadow = false,
-  force = false
+  force = false,
+  skipOwnSchema = false
 ): Promise<void> {
   const connectionString = shadow
     ? parsedSettings.shadowConnectionString
@@ -23,7 +24,11 @@ export async function _migrate(
     connectionString,
     parsedSettings,
     async (pgClient, context) => {
-      const lastMigration = await getLastMigration(pgClient, parsedSettings);
+      const lastMigration = await getLastMigration(
+        pgClient,
+        parsedSettings,
+        skipOwnSchema
+      );
       const remainingMigrations = await getMigrationsAfter(
         parsedSettings,
         lastMigration
@@ -62,8 +67,9 @@ export async function _migrate(
 export async function migrate(
   settings: Settings,
   shadow = false,
-  force = false
+  force = false,
+  skipOwnSchema = false
 ): Promise<void> {
   const parsedSettings = await parseSettings(settings, shadow);
-  return _migrate(parsedSettings, shadow, force);
+  return _migrate(parsedSettings, shadow, force, skipOwnSchema);
 }
