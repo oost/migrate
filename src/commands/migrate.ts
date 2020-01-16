@@ -67,8 +67,9 @@ export async function _migrate(
 export async function migrate(
   settings: Settings,
   shadow = false,
-  force = false
+  force = false,
+  skipOwnSchema = false
 ): Promise<void> {
   const parsedSettings = await parseSettings(settings, shadow);
-  return _migrate(parsedSettings, shadow, force);
+  return _migrate(parsedSettings, shadow, force, skipOwnSchema);
 }
