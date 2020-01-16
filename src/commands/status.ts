@@ -14,13 +14,20 @@ interface Status {
   hasCurrentMigration: boolean;
 }
 
-async function _status(parsedSettings: ParsedSettings): Promise<Status> {
+async function _status(
+  parsedSettings: ParsedSettings,
+  skipOwnSchema: boolean
+): Promise<Status> {
   const connectionString = parsedSettings.connectionString;
   if (!connectionString) {
     throw new Error("Could not determine connection string");
   }
   return withClient(connectionString, parsedSettings, async pgClient => {
-    const lastMigration = await getLastMigration(pgClient, parsedSettings);
+    const lastMigration = await getLastMigration(
+      pgClient,
+      parsedSettings,
+      skipOwnSchema
+    );
     const remainingMigrations = await getMigrationsAfter(
       parsedSettings,
       lastMigration
@@ -36,7 +43,10 @@ async function _status(parsedSettings: ParsedSettings): Promise<Status> {
   });
 }
 
-export async function status(settings: Settings): Promise<Status> {
+export async function status(
+  settings: Settings,
+  skipOwnSchema: boolean
+): Promise<Status> {
   const parsedSettings = await parseSettings(settings, true);
-  return _status(parsedSettings);
+  return _status(parsedSettings, skipOwnSchema);
 }
